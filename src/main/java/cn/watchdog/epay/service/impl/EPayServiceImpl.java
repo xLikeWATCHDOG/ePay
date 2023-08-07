@@ -1,7 +1,19 @@
 package cn.watchdog.epay.service.impl;
 
+import cn.watchdog.epay.common.ErrorCode;
+import cn.watchdog.epay.exception.BusinessException;
+import cn.watchdog.epay.mapper.CommoditiesMapper;
+import cn.watchdog.epay.mapper.OrdersMapper;
+import cn.watchdog.epay.model.dto.EPayCreateRequest;
+import cn.watchdog.epay.model.entity.Commodities;
+import cn.watchdog.epay.model.entity.Orders;
+import cn.watchdog.epay.service.CommoditiesService;
 import cn.watchdog.epay.service.EPayService;
+import cn.watchdog.epay.service.OrdersService;
+import cn.watchdog.epay.utils.PaymentUtils;
 import cn.watchdog.epay.utils.UrlUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +38,14 @@ public class EPayServiceImpl implements EPayService {
     private String key;
     @Value("${domain.name}")
     private String domainName;
+    @Resource
+    private OrdersService ordersService;
+    @Resource
+    private OrdersMapper ordersMapper;
+    @Resource
+    private CommoditiesService commoditiesService;
+    @Resource
+    private CommoditiesMapper commoditiesMapper;
 
     @NotNull
     @Override
@@ -78,7 +98,7 @@ public class EPayServiceImpl implements EPayService {
 
     @Override
     @NotNull
-    public String getPayUrl(String no, String name, String money) {
+    public PaymentUtils.PaymentInformation getPaymentInformation(String no, String name, String money) {
         // Prepare the request parameters
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("pid", getPid());
@@ -91,6 +111,36 @@ public class EPayServiceImpl implements EPayService {
         String sign = getSign(requestParams);
         requestParams.put("sign", sign);
         String baseUrl = getUrl() + "submit.php";
-        return UrlUtils.buildUrl(baseUrl, requestParams);
+        PaymentUtils.PaymentInformation paymentInformation = new PaymentUtils.PaymentInformation();
+        paymentInformation.setUrl(UrlUtils.buildUrl(baseUrl, requestParams));
+        paymentInformation.setParams(requestParams);
+        return paymentInformation;
+    }
+
+    @Override
+    @NotNull
+    public String createPayment(EPayCreateRequest ePayCreateRequest) {
+        Long commodityNumber = ePayCreateRequest.getCommodityNumber();
+        String userName = ePayCreateRequest.getUserName();
+        String userEmail = ePayCreateRequest.getUserEmail();
+        QueryWrapper<Commodities> commoditiesQueryWrapper = new QueryWrapper<>();
+        commoditiesQueryWrapper.eq("id", commodityNumber);
+        Commodities commodities = commoditiesMapper.selectOne(commoditiesQueryWrapper);
+        if (commodities == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "商品不存在");
+        }
+        String no = PaymentUtils.generateOrderNumber();
+        String name = commodities.getName();
+        String money = commodities.getMoney();
+        PaymentUtils.PaymentInformation paymentInformation = getPaymentInformation(no, name, money);
+        Orders orders = new Orders();
+        orders.setOrderNumber(no);
+        orders.setCommodityNumber(commodityNumber);
+        orders.setMoney(money);
+        orders.setSign(paymentInformation.getParams().get("sign"));
+        orders.setUserName(userName);
+        orders.setUserEmail(userEmail);
+        ordersService.save(orders);
+        return paymentInformation.getUrl();
     }
 }

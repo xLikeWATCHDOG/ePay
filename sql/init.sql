@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS orders
 CREATE TABLE IF NOT EXISTS commodities
 (
     id           BIGINT AUTO_INCREMENT COMMENT '商品编号' PRIMARY KEY,
+    name         VARCHAR(256)                       NOT NULL COMMENT '商品名称',
     money        VARCHAR(256)                       NOT NULL COMMENT '金额',
     introduction TEXT                               NOT NULL COMMENT '简介',
     createTime   DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '创建时间',

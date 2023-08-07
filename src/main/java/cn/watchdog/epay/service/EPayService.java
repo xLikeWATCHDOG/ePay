@@ -1,5 +1,7 @@
 package cn.watchdog.epay.service;
 
+import cn.watchdog.epay.model.dto.EPayCreateRequest;
+import cn.watchdog.epay.utils.PaymentUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -20,5 +22,7 @@ public interface EPayService {
     @NotNull String getSign(Map<String, String> param);
 
 
-    @NotNull String getPayUrl(String no, String name, String money);
+    @NotNull PaymentUtils.PaymentInformation getPaymentInformation(String no, String name, String money);
+
+    @NotNull String createPayment(EPayCreateRequest ePayCreateRequest);
 }
