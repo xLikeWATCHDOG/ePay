@@ -14,8 +14,11 @@ public interface EPayService {
 
     @NotNull String getKey();
 
+    @NotNull String getDomainName();
+
 
     @NotNull String getSign(Map<String, String> param);
 
-    String getPayUrl(String no, String notifyUrl, String returnUrl, String name, String money);
+
+    @NotNull String getPayUrl(String no, String name, String money);
 }

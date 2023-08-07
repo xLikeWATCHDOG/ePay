@@ -1,10 +1,12 @@
 package cn.watchdog.epay.common;
 
+import lombok.Getter;
+
 /**
  * 错误码
  */
+@Getter
 public enum ErrorCode {
-
     SUCCESS(0, "操作成功"),
     PARAMS_ERROR(40000, "请求参数错误");
 
@@ -21,14 +23,6 @@ public enum ErrorCode {
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
 }

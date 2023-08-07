@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.watchdog.epay.mapper.OrdersMapper">
+
+    <resultMap id="BaseResultMap" type="cn.watchdog.epay.model.entity.Orders">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="orderNumber" column="orderNumber" jdbcType="VARCHAR"/>
+        <result property="commodityNumber" column="commodityNumber" jdbcType="BIGINT"/>
+        <result property="money" column="money" jdbcType="VARCHAR"/>
+        <result property="paymentType" column="paymentType" jdbcType="TINYINT"/>
+        <result property="paymentStatus" column="paymentStatus" jdbcType="BOOLEAN"/>
+        <result property="sign" column="sign" jdbcType="VARCHAR"/>
+        <result property="userName" column="userName" jdbcType="VARCHAR"/>
+        <result property="userEmail" column="userEmail" jdbcType="VARCHAR"/>
+        <result property="callBack" column="callBack" jdbcType="BOOLEAN"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="paymentTime" column="paymentTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,orderNumber,commodityNumber,
+        money,paymentType,paymentStatus,sign
+        userName,userEmail,callBack,createTime,
+        paymentTime,isDelete
+    </sql>
+</mapper>

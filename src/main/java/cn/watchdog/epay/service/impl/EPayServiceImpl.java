@@ -24,6 +24,14 @@ public class EPayServiceImpl implements EPayService {
     private String pid;
     @Value("${epay.key}")
     private String key;
+    @Value("${domain.name}")
+    private String domainName;
+
+    @NotNull
+    @Override
+    public String getDomainName() {
+        return domainName;
+    }
 
     @Override
     @NotNull
@@ -69,20 +77,19 @@ public class EPayServiceImpl implements EPayService {
     }
 
     @Override
-    public String getPayUrl(String no, String notifyUrl, String returnUrl, String name, String money) {
+    @NotNull
+    public String getPayUrl(String no, String name, String money) {
         // Prepare the request parameters
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("pid", getPid());
-        //requestParams.put("type", "alipay");
         requestParams.put("out_trade_no", no);
-        requestParams.put("notify_url", notifyUrl);
-        requestParams.put("return_url", returnUrl);
+        requestParams.put("notify_url", getDomainName() + "epay/notify");
+        requestParams.put("return_url", getDomainName() + "epay/return");
         requestParams.put("name", name);
         requestParams.put("money", money);
         requestParams.put("sign_type", "MD5");
         String sign = getSign(requestParams);
         requestParams.put("sign", sign);
-        // Build the final URL
         String baseUrl = getUrl() + "submit.php";
         return UrlUtils.buildUrl(baseUrl, requestParams);
     }
