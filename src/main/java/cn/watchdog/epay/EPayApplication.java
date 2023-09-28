@@ -11,8 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAsync
 public class EPayApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(EPayApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(EPayApplication.class, args);
+	}
 
 }

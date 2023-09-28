@@ -2,6 +2,7 @@ package cn.watchdog.epay.model.dto;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -9,8 +10,8 @@ import java.io.Serializable;
  */
 @Data
 public class EPayCreateRequest implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private Long commodityNumber;
-    private String userName;
-    private String userEmail;
+	@Serial
+	private static final long serialVersionUID = 1L;
+	private String name;
+	private String money;
 }

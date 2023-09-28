@@ -14,6 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> implements OrdersService {
-    @Resource
-    private OrdersMapper ordersMapper;
+	@Resource
+	private OrdersMapper ordersMapper;
 }
