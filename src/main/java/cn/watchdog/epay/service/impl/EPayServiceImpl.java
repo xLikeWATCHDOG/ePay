@@ -155,6 +155,7 @@ public class EPayServiceImpl implements EPayService {
 		orders.setPaymentStatus(true);
 		orders.setPaymentTime(new Date());
 		ordersService.updateById(orders);
+		// TODO 在这里写回调完成后的执行的内容。
 		return "success";
 	}
 
