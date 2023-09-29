@@ -143,6 +143,9 @@ public class EPayServiceImpl implements EPayService {
 		if (orders == null) {
 			throw new BusinessException(ErrorCode.PARAMS_ERROR, "订单不存在");
 		}
+		if (!orders.getPaymentStatus()){
+			throw new BusinessException(ErrorCode.PARAMS_ERROR, "success｜订单已完成回调");
+		}
 		// 记录已回调
 		orders.setCallBack(true);
 		Map<String, String> requestParams = getNotifySign(ePayResultRequest, out_trade_no, type);
